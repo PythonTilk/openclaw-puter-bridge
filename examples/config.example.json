@@ -1,0 +1,5 @@
+{
+  "authTokenPath": "~/.openclaw/puter-token.txt",
+  "defaultModel": "puter/gpt-5-nano",
+  "apiUrl": "https://api.puter.com"
+}
