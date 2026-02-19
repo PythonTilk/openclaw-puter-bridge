@@ -100,3 +100,60 @@ export { Config } from './config';
 export { createModelProvider, ModelProvider } from './model-provider';
 export { SUPPORTED_MODELS };
 export * from './types';
+
+// ---------------------------------------------------------------------------
+// OpenClaw plugin loader entry point
+//
+// The loader calls resolvePluginModuleExport(mod) and then checks:
+//   const register = def.register ?? def.activate
+//   if (typeof register !== 'function') → error
+//
+// Rules:
+//   - register() MUST be synchronous (the loader ignores returned Promises)
+//   - api.pluginConfig contains the validated per-plugin config block
+//   - api.logger is available for structured logging
+// ---------------------------------------------------------------------------
+
+interface OpenClawPluginApi {
+  pluginConfig?: unknown;
+  logger: {
+    info: (...args: unknown[]) => void;
+    warn: (...args: unknown[]) => void;
+    error: (...args: unknown[]) => void;
+  };
+}
+
+// eslint-disable-next-line import/no-default-export
+export default {
+  id: 'puter-bridge',
+
+  register(api: OpenClawPluginApi): void {
+    const config = (api.pluginConfig ?? {}) as Partial<PuterBridgeConfig>;
+
+    // Synchronous pre-check: verify a token is resolvable before going async.
+    // getAuthToken() reads from config object, file, or env var — all sync.
+    const syncConfig = new Config(config);
+    const token = syncConfig.getAuthToken();
+
+    if (!token) {
+      api.logger.error(
+        '[PuterBridge] No auth token found. ' +
+        'Set authToken, authTokenPath, or the PUTER_AUTH_TOKEN environment variable. ' +
+        'Plugin will not function until a token is provided.',
+      );
+      return; // bail — don't fire async init with a missing token
+    }
+
+    api.logger.info(`[PuterBridge] Token found, initialising with model: ${syncConfig.getDefaultModel()}`);
+
+    // Fire-and-forget async initialisation.
+    // register() must be sync so we log errors via api.logger instead of throwing.
+    initialize(config)
+      .then(() => {
+        api.logger.info(`[PuterBridge] Ready — ${SUPPORTED_MODELS.length} models available`);
+      })
+      .catch((err: unknown) => {
+        api.logger.error('[PuterBridge] Initialisation failed:', (err as Error).message ?? err);
+      });
+  },
+};
