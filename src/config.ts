@@ -4,7 +4,7 @@ import * as os from 'os';
 import { PuterBridgeConfig, SUPPORTED_MODELS } from './types';
 
 const DEFAULT_CONFIG: PuterBridgeConfig = {
-  defaultModel: 'puter/gpt-5-nano',
+  defaultModel: 'puter/openai/gpt-5-nano',
   apiUrl: 'https://api.puter.com',
 };
 
@@ -75,7 +75,7 @@ export class Config {
   }
 
   getDefaultModel(): string {
-    return this.config.defaultModel ?? 'puter/gpt-5-nano';
+    return this.config.defaultModel ?? 'puter/openai/gpt-5-nano';
   }
 
   getApiUrl(): string {

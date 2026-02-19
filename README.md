@@ -12,18 +12,33 @@ Native OpenClaw plugin to access 500+ free AI models via Puter.js.
 
 ## Supported Models
 
-### Tier 1 (Free/Fast)
-- `puter/gpt-5-nano` - Fast, efficient
-- `puter/gemini-2.5-flash-lite` - Google's fast model
-- `puter/claude-sonnet-4` - Anthropic's balanced model
+Model IDs use the format `puter/<provider>/<model>` in OpenClaw config.
+The `puter/` prefix is stripped before sending to the Puter API.
 
-### Tier 2 (Powerful)
-- `puter/gpt-5` - Full GPT-5
-- `puter/claude-opus-4.6` - Most capable Claude
-- `puter/deepseek-r1` - Reasoning model
-- And 15+ more models
+### Tier 1 — Fast / Free
+| OpenClaw model ID | Description |
+|---|---|
+| `puter/openai/gpt-5-nano` | Fastest GPT-5 variant |
+| `puter/google/gemini-2.5-flash-lite` | Google's lightest fast model |
+| `puter/google/gemini-2.0-flash-lite` | Gemini 2.0 Flash Lite |
+| `puter/anthropic/claude-haiku-4-5` | Anthropic's fast model |
+| `puter/meta-llama/llama-3.3-70b-instruct` | Open-weight Llama |
 
-Full list available at https://puter.com/ai/models
+### Tier 2 — Powerful
+| OpenClaw model ID | Description |
+|---|---|
+| `puter/openai/gpt-5` | Full GPT-5 |
+| `puter/openai/gpt-5.2` | GPT-5.2 flagship |
+| `puter/anthropic/claude-opus-4-6` | Most capable Claude (1M ctx) |
+| `puter/anthropic/claude-sonnet-4-6` | Claude Sonnet 4.6 (1M ctx) |
+| `puter/google/gemini-3-pro-preview` | Gemini 3 Pro |
+| `puter/deepseek/deepseek-r1` | DeepSeek R1 reasoning |
+| `puter/x-ai/grok-4` | Grok 4 |
+| `puter/meta-llama/llama-4-maverick` | Llama 4 Maverick (1M ctx) |
+| `puter/moonshotai/kimi-k2.5` | Kimi K2.5 |
+| `puter/qwen/qwen3-235b-a22b` | Qwen3 235B |
+
+Full live list: https://developer.puter.com/ai/models/
 
 ## Installation
 
@@ -76,7 +91,7 @@ Add to `~/.openclaw/openclaw.json`:
         "enabled": true,
         "config": {
           "authTokenPath": "~/.openclaw/puter-token.txt",
-          "defaultModel": "puter/gpt-5-nano"
+          "defaultModel": "puter/openai/gpt-5-nano"
         }
       }
     }
@@ -84,30 +99,42 @@ Add to `~/.openclaw/openclaw.json`:
   "agents": {
     "defaults": {
       "model": {
-        "primary": "puter/gpt-5-nano",
+        "primary": "puter/openai/gpt-5-nano",
         "fallbacks": [
-          "puter/gemini-2.5-flash-lite",
-          "puter/claude-sonnet-4"
+          "puter/google/gemini-2.5-flash-lite",
+          "puter/anthropic/claude-sonnet-4-6"
         ]
       },
       "models": {
-        "puter/gpt-5-nano": {
+        "puter/openai/gpt-5-nano": {
           "alias": "Puter GPT-5 Nano (Free)"
         },
-        "puter/gpt-5": {
+        "puter/openai/gpt-5": {
           "alias": "Puter GPT-5 (Free)"
         },
-        "puter/claude-sonnet-4": {
-          "alias": "Puter Claude Sonnet 4 (Free)"
+        "puter/openai/gpt-5.2": {
+          "alias": "Puter GPT-5.2 (Free)"
         },
-        "puter/claude-opus-4.6": {
+        "puter/anthropic/claude-sonnet-4-6": {
+          "alias": "Puter Claude Sonnet 4.6 (Free)"
+        },
+        "puter/anthropic/claude-opus-4-6": {
           "alias": "Puter Claude Opus 4.6 (Free)"
         },
-        "puter/deepseek-r1": {
+        "puter/deepseek/deepseek-r1": {
           "alias": "Puter DeepSeek R1 (Free)"
         },
-        "puter/gemini-2.5-flash-lite": {
-          "alias": "Puter Gemini Flash (Free)"
+        "puter/google/gemini-3-pro-preview": {
+          "alias": "Puter Gemini 3 Pro (Free)"
+        },
+        "puter/google/gemini-2.5-flash-lite": {
+          "alias": "Puter Gemini 2.5 Flash Lite (Free)"
+        },
+        "puter/x-ai/grok-4": {
+          "alias": "Puter Grok 4 (Free)"
+        },
+        "puter/meta-llama/llama-4-maverick": {
+          "alias": "Puter Llama 4 Maverick (Free)"
         }
       }
     }

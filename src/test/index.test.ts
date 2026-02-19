@@ -70,7 +70,7 @@ console.log('\nConfig');
 
 test('default model falls back to gpt-5-nano', () => {
   const cfg = new Config({});
-  assert.strictEqual(cfg.getDefaultModel(), 'puter/gpt-5-nano');
+  assert.strictEqual(cfg.getDefaultModel(), 'puter/openai/gpt-5-nano');
 });
 
 test('explicit defaultModel is respected', () => {
@@ -137,13 +137,13 @@ test('all model ids start with puter/', () => {
 test('all models have name and provider fields', () => {
   SUPPORTED_MODELS.forEach((m: ModelInfo) => {
     assert.ok(m.name, `model ${m.id} is missing name`);
-    assert.strictEqual(m.provider, 'Puter', `model ${m.id} has unexpected provider`);
+    assert.ok(m.provider && m.provider.length > 0, `model ${m.id} is missing provider`);
   });
 });
 
 test('gpt-5-nano is present', () => {
   const ids = SUPPORTED_MODELS.map((m: ModelInfo) => m.id);
-  assert.ok(ids.includes('puter/gpt-5-nano'), 'puter/gpt-5-nano missing from model list');
+  assert.ok(ids.includes('puter/openai/gpt-5-nano'), 'puter/gpt-5-nano missing from model list');
 });
 
 test('model ids are unique', () => {
@@ -170,7 +170,7 @@ if (!liveToken) {
     // Non-streaming
     try {
       const response = await client.completeChat(
-        'puter/gpt-5-nano',
+        'puter/openai/gpt-5-nano',
         [{ role: 'user', content: 'Reply with the single word: PONG' }],
         { temperature: 0 }
       );
@@ -188,7 +188,7 @@ if (!liveToken) {
     try {
       let chunks = 0;
       for await (const chunk of client.streamChat(
-        'puter/gpt-5-nano',
+        'puter/openai/gpt-5-nano',
         [{ role: 'user', content: 'Say hi in one word.' }],
         { temperature: 0 }
       )) {
