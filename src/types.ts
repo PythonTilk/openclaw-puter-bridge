@@ -82,11 +82,21 @@ export interface PuterBridgeConfig {
 }
 
 export interface ModelInfo {
-  id: string;
+  id: string;          // OpenClaw ref: puter/<puter-model-id>
   name: string;
   provider: string;
   context_window?: number;
+  maxTokens?: number;
+  reasoning?: boolean; // true for o1/R1-style reasoning models
+  input?: Array<'text' | 'image'>;
 }
+
+// The fake base URL OpenClaw will route requests to.
+// registerHttpHandler intercepts these and translates them to /drivers/call.
+export const PUTER_PROXY_BASE_URL = 'https://puter-bridge.internal';
+
+// The real Puter driver endpoint
+export const PUTER_DRIVER_URL = 'https://api.puter.com/drivers/call';
 
 // ---------------------------------------------------------------------------
 // Supported chat-completion models

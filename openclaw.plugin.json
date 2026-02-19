@@ -4,6 +4,7 @@
   "description": "Access 500+ free AI models via Puter.js",
   "version": "1.0.0",
   "main": "dist/index.js",
+  "providers": ["puter"],
   "configSchema": {
     "type": "object",
     "additionalProperties": false,
